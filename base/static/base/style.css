@@ -1,0 +1,98 @@
+:root
+{
+    --main-bg-color: #091026;
+    --secondary-bg-color: #07121a;
+    --text-color: #ffffff;
+    --accent-color: #00ffff;
+}
+
+*
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a
+{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0 5px;
+    text-decoration: none;
+    color: black;
+    width: 10%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+a:hover .afterhover
+{
+    display: block;
+}
+
+a .afterhover
+{
+    display: none;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    border-bottom: 3px solid red;
+    position: absolute;
+    top: 0;
+}
+
+nav
+{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    padding: 10px;
+    width: 100%;
+    height: 50px;
+    background-color: aqua;
+}
+
+.auth
+{
+    /* margin-left: auto; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    width: 10%;
+}
+
+.auth a
+{
+    width: 100%;
+}
+
+.auth form button
+{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+}
+
+/* page-level handy defaults (optional) */
+html,body{
+  height:100%;
+  margin:0;
+  background: linear-gradient(180deg, var(--main-bg-color) 0%, var(--secondary-bg-color) 100%);
+  color: var(--text-color);
+}
+
+footer
+{
+  text-align: center;
+  padding: 20px;
+  font-size: 50px;
+  color: #888;
+  
+}

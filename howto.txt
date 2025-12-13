@@ -1,0 +1,20 @@
+runserver: python manage.py runserver port
+
+use ngrok to temporary public
+ngrok http port
+
+
+
+how to start app
+python manage.py startapp [app_name]
+
+
+
+how to migrate:
+python manage.py makemigrations [app_name]
+example: python manage.py makemigrations polls
+
+python manage.py sqlmigrate [app_name] [index]
+example: python manage.py sqlmigrate polls 0001
+
+python manage.py migrate

@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Account Details{% endblock %}
+{% block content %}
+<h2>Account Details</h2>
+<div>User name: {{ request.user.username }}</div>
+<div>Email: {{ request.user.email }}</div>
+<h3>Update your details</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Update Details</button>
+</form>
+
+
+<p><a href="{% url 'password_change' %}" style="color: red;">Password Change</a></p>
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Log Out</button>
+</form>
+{% endblock %}

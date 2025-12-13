@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{%load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'home/style.css' %}">
+
+<h1>Send Email</h1>
+<a class="home a" href="{% url 'home:send_email' %}">Send a new email</a>
+
+<h1>Emails: </h1>
+<ul>
+    {% for email in emails %}
+        <li>
+            <strong>From:</strong> {{ email.sender_email }} <br>
+            <strong>Subject:</strong> {{ email.subject }} <br>
+            <strong>Date:</strong> {{ email.send_date }} <br>
+            <strong>Phishing:</strong> {{ email.is_phishing }} <br>
+            <a class="home a" href="{% url 'home:email_detail' email.id %}">View Details</a>
+          </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+.home.a
+{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+ul li
+{
+    list-style-type: none;
+    border-left: black 2px solid;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

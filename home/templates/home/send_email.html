@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Send Email{% endblock %}
+
+{%load static %}
+
+{% block content %}
+
+<form action="{% url 'home:send_email' %}" method="post">
+    {% csrf_token %}
+    <label for="sender_email">Sender Email:</label>
+    <input type="email" id="sender_email" name="sender_email" placeholder="Enter sender email" required><br><br>
+
+    <label for="receiver_email">Receiver Email:</label>
+    <input type="email" id="receiver_email" name="receiver_email" placeholder="Enter receiver email" required><br><br>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" placeholder="Enter subject" required><br><br>
+
+    <label for="body">Body:</label><br>
+    <textarea id="body" name="body" rows="10" cols="30" placeholder="Enter email body" required></textarea><br><br>
+
+    <input type="submit" value="Send Email">
+</form>
+
+{% endblock %}

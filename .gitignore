@@ -1,0 +1,6 @@
+sk.txt
+media/
+*.pyc
+.env
+.vscode/
+__pycache__/
