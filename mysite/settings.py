@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'base',
     'home',
     'accounts',
+    'visualizeTree',
 ]
 
 MIDDLEWARE = [

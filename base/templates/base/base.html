@@ -13,6 +13,7 @@
     <header>
         <nav>
             <a href="/">Home<div class="afterhover"></div></a>
+            <a href="/visualizeTree/">Visualize Tree<div class="afterhover"></div></a>
             {% if user.is_staff %}
                 <a href="/admin/">Admin<div class="afterhover"></div></a>
             {% endif %}
@@ -33,7 +34,7 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <main>
+    <main style="margin: auto;">
         {% block content %}
         {% endblock %}
     </main>

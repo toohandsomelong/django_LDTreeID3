@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
-
 from home.forms import EmailForm
-
 from .models import Email
 from django.views import View
+from visualizeTree.LearningDecisionTree import load_tree, predict, Tree, analyze_mail
+
+tree = load_tree()
 
 # Create your views here.
 
@@ -27,7 +28,10 @@ class SendEmailView(View):
         
         form = EmailForm(request.POST)
         if form.is_valid():
-            form.save()
+            email = form.save(commit=False)
+            print(predict(analyze_mail(form.cleaned_data['body']), tree))
+            email.is_phishing = predict(analyze_mail(form.cleaned_data['body']), tree)[0] == '1'
+            email.save()
             return redirect('home:index')
         return redirect('home:index')
     
