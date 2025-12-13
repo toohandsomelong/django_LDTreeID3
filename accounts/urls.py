@@ -8,4 +8,5 @@ name = 'accounts'
 urlpatterns = [
     path('', views.index, name='index'),
     path("signup/", views.SignUpView.as_view(), name="signup"),
+    path('update_email/', views.update_email, name='update_email'),
 ]

@@ -1,27 +1,23 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
-{%load static %}
+{% load static %}
 
-{% block content %}
-
-<link rel="stylesheet" href="{% static 'home/style.css' %}">
-
-<h1>Send Email</h1>
-<a class="home a" href="{% url 'home:send_email' %}">Send a new email</a>
-
-<h1>Emails: </h1>
-<ul>
-    {% for email in emails %}
-        <li>
-            <strong>From:</strong> {{ email.sender_email }} <br>
-            <strong>Subject:</strong> {{ email.subject }} <br>
-            <strong>Date:</strong> {{ email.send_date }} <br>
-            <strong>Phishing:</strong> {{ email.is_phishing }} <br>
-            <a class="home a" href="{% url 'home:email_detail' email.id %}">View Details</a>
-          </li>
-    {% endfor %}
-</ul>
-
+{% block main_content %}
+<div class="email-list">
+    <h2>{{ title }}</h2>
+    <ul>
+        {% for user_email in user_emails %}
+        <li class="{% if not user_email.is_read %}unread{% endif %}">
+            <div class="email-sender">{{ user_email.email.sender_email }}</div>
+            <div class="email-subject">{{ user_email.email.subject }}</div>
+            <div class="email-date">{{ user_email.email.send_date}}</div>
+            <a href="{% url 'home:email_detail' user_email.email.id %}">View</a>
+        </li>
+        {% empty %}
+        <li>No emails available.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

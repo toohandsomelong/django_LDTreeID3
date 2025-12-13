@@ -6,6 +6,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'base/style.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'base/assets/carrot.png' %}">
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
 </head>
 <body>
 
@@ -36,6 +37,39 @@
     <!-- MAIN CONTENT -->
     <main style="margin: auto;">
         {% block content %}
+
+        <div class="gmail-layout">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <button class="create-btn" onclick="location.href='{% url 'home:send_email' %}'">Create Email</button>
+                <ul class="labels">
+                    <li class="{% if request.GET.label == None %}active{% endif %}">
+                        <a href="{% url 'home:index' %}">Inbox</a>
+                        {% if unread_count > 0 %}<span class="count-badge">{{ unread_count }}</span>{% endif %}
+                    </li>
+                    <li class="{% if request.GET.label == 'sent' %}active{% endif %}">
+                        <a href="/?label=sent">Sent</a>
+                    </li>
+                    <li class="{% if request.GET.label == 'phishing' %}active{% endif %}">
+                        <a href="/?label=phishing">Phishing</a>
+                        {% if phishing_unread_count > 0 %}<span class="count-badge">{{ phishing_unread_count }}</span>{% endif %}
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main content -->
+            <div class="main">
+                <!-- Top bar -->
+                <div class="top-bar">
+                    <div class="user-menu">
+                        <span>{{ request.user.email }}</span>
+                    </div>
+                </div>
+
+                <!-- Page-specific content -->
+                {% block main_content %}{% endblock %}
+            </div>
+        </div>
         {% endblock %}
     </main>
 

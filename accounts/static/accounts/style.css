@@ -1,0 +1,159 @@
+/* Auth forms */
+.auth-form-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--primary-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form-container h2 {
+    text-align: center;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.auth-form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.auth-form-container input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+}
+
+.auth-form-container input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-color);
+}
+
+.auth-form-container button {
+    padding: 10px;
+    background-color: var(--accent-color);
+    color: var(--secondary-bg-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.auth-form-container button:hover {
+    background-color: var(--text-color);
+}
+
+/* Account details */
+.account-details {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--primary-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-details h2,
+.account-details h3 {
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.update-form,
+.logout-form {
+    margin-bottom: 20px;
+}
+
+.update-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.update-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+.update-form input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-color);
+}
+
+.update-form button,
+.logout-form button {
+    padding: 10px 15px;
+    background-color: var(--accent-color);
+    color: var(--secondary-bg-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.update-form button:hover,
+.logout-form button:hover {
+    background-color: var(--text-color);
+}
+
+.password-link {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.password-link:hover {
+    text-decoration: underline;
+}
+
+.account-actions {
+    border-top: 1px solid var(--accent-color);
+    padding-top: 20px;
+}
+
+.auth-links p {
+    margin: 5px 0;
+}
+.auth-links p a {
+    width: 100%;
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.auth-links p a:hover {
+    text-decoration: underline;
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-form-container,
+    .account-details {
+        margin: 20px;
+        padding: 15px;
+    }
+}

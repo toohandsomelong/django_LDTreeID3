@@ -2,25 +2,24 @@
 
 {% block title %}Send Email{% endblock %}
 
-{%load static %}
+{% load static %}
 
-{% block content %}
-
-<form action="{% url 'home:send_email' %}" method="post">
-    {% csrf_token %}
-    <label for="sender_email">Sender Email:</label>
-    <input type="email" id="sender_email" name="sender_email" placeholder="Enter sender email" required><br><br>
-
-    <label for="receiver_email">Receiver Email:</label>
-    <input type="email" id="receiver_email" name="receiver_email" placeholder="Enter receiver email" required><br><br>
-
-    <label for="subject">Subject:</label>
-    <input type="text" id="subject" name="subject" placeholder="Enter subject" required><br><br>
-
-    <label for="body">Body:</label><br>
-    <textarea id="body" name="body" rows="10" cols="30" placeholder="Enter email body" required></textarea><br><br>
-
-    <input type="submit" value="Send Email">
-</form>
-
+{% block main_content %}
+<div class="compose">
+    <h2>New Message</h2>
+    <form action="{% url 'home:send_email' %}" method="post">
+        {% csrf_token %}
+        <div>From:</div>
+        <input type="email" name="sender_email" value="{{ request.user.email }}" required readonly>
+        <div>To:</div>
+        <input type="email" name="receiver_email" placeholder="To" value="{{ receiver_email }}" required>
+        <div>Subject:</div>
+        <input type="text" name="subject" placeholder="Subject" required>
+        <div>Message:</div>
+        <textarea name="body" placeholder="Message" rows="20" required></textarea>
+        <div class="form-actions">
+            <button type="submit">Send</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
