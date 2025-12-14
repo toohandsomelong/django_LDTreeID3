@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from home.forms import EmailForm
 from .models import Email, UserEmail
+from django.contrib.auth.models import User
 from django.views import View
 from visualizeTree.LearningDecisionTree import load_tree, predict, analyze_mail
 
@@ -15,14 +16,10 @@ class IndexView(View):
         
         title = 'Inbox'
         label = request.GET.get('label')
-        # emails = Email.objects.filter(receiver_email=request.user.email, 
-        #                                 useremail__user=request.user,
-        #                                 useremail__is_deleted=False).order_by('-send_date')
         user_emails = UserEmail.objects.filter(user=request.user, 
                                                is_deleted=False, 
                                                email__receiver_email=request.user.email
                                                ).select_related('email').order_by('-email__send_date')
-        print(user_emails)
         match label:
             case None:
                 title = 'Inbox'
@@ -69,11 +66,17 @@ class SendEmailView(View):
             email.is_phishing = predict(analyze_mail(form.cleaned_data['body']), tree)[0] == '1'
             email.save()
 
-            # Link email to sender
+            # Link email to sender and receiver
             UserEmail.objects.create(
                 user=request.user,
                 email=email,
                 is_read=True
+            )
+            # MultipleObjectsReturned at /send_email/ get() returned more than one UserEmail -- it returned 8!
+
+            UserEmail.objects.create(
+                user=User.objects.get(email=form.cleaned_data['receiver_email']),
+                email=email
             )
             
             return redirect('home:index')
