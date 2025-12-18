@@ -62,8 +62,9 @@ class SendEmailView(View):
 
         if form.is_valid():
             email = form.save(commit=False)
-            print(predict(analyze_mail(form.cleaned_data['body']), tree))
-            email.is_phishing = predict(analyze_mail(form.cleaned_data['body']), tree)[0] == '1'
+            predicted_label = predict(analyze_mail(form.cleaned_data['body']), tree)[0]
+            print(f"Predicted label: {predicted_label}")
+            email.is_phishing = predicted_label == '1'
             email.save()
 
             # Link email to sender and receiver

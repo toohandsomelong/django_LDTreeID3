@@ -217,7 +217,8 @@ def analyze_mail(email: str) -> pd.DataFrame:
         'NumSensitiveWords': sum(1 for word in listSensitiveWords if word.lower() in email.lower()),
         'EmbeddedBrandName': sum(1 for brand in listBrandNames if brand in email.lower()),
     }
-    return pd.DataFrame([phishingFeatures])
+
+    return divideThresholds(pd.DataFrame([phishingFeatures]))
 
 def divideThresholds(dataset) -> pd.DataFrame:
     for col in dataset.columns:
