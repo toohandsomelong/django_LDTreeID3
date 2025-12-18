@@ -257,32 +257,37 @@ def divideThresholds(dataset) -> pd.DataFrame:
 
     return temp
 
-train_dataset = pd.read_csv("email_phishing_data.csv")
-cols_to_drop = [
-    'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
-    'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
-    'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
-    'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
-    'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
-    'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
-    'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
-    'SubdomainLevelRT', 'UrlLengthRT', #they are null
-    'id'
-]
+# train_dataset = pd.read_csv("email_phishing_data.csv")
+# cols_to_drop = [
+#     'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
+#     'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
+#     'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
+#     'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
+#     'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
+#     'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
+#     'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
+#     'SubdomainLevelRT', 'UrlLengthRT', #they are null
+#     'id'
+# ]
 
-train_dataset.drop(columns=cols_to_drop, inplace=True)
+# train_dataset.drop(columns=cols_to_drop, inplace=True)
 
-train_dataset = divideThresholds(train_dataset)
+# train_dataset = divideThresholds(train_dataset)
 
-train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
+# train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
 
-decision_tree : Tree = buildTree(train_dataset.copy())
+# decision_tree : Tree = buildTree(train_dataset.copy())
 
 import pickle
-with open('decision_tree.pkl', 'wb') as f:
-    pickle.dump(decision_tree, f)
+# with open('decision_tree.pkl', 'wb') as f:
+#     pickle.dump(decision_tree, f)
   
 def load_tree(file_path: str = "decision_tree.pkl") -> Tree:
-    with open(file_path, 'rb') as f:
-        loaded_tree = pickle.load(f)
+    try:
+        with open(file_path, 'rb') as f:
+            loaded_tree : Tree = pickle.load(f)
+    except FileNotFoundError:
+      raise FileExistsError('File not found: ' + file_path)
+    except Exception as e:
+      raise RuntimeError(f'{str(e)}\nSuggest to retrain the model to generate the decision_tree.pkl file.')
     return loaded_tree
