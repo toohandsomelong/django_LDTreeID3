@@ -219,28 +219,68 @@ def analyze_mail(email: str) -> pd.DataFrame:
     }
     return pd.DataFrame([phishingFeatures])
 
-# train_dataset = pd.read_csv("email_phishing_data.csv")
-# cols_to_drop = [
-#     'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
-#     'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
-#     'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
-#     'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
-#     'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
-#     'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
-#     'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
-#     'SubdomainLevelRT', 'UrlLengthRT', #they are null
-#     'id'
-# ]
+def divideThresholds(dataset) -> pd.DataFrame:
+    temp = dataset.copy().iloc[:, :-1] 
 
-# train_dataset.drop(columns=cols_to_drop, inplace=True)
+    for col in temp.columns:
+        if temp[col].dtype not in [np.int64, np.float64]:
+            continue
 
-# train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
+        max_val = temp[col].max()
+        divideBy = int(max_val / 20)
+        
+        if divideBy == 0:
+            continue
 
-# decision_tree : Tree = buildTree(train_dataset.copy())
+        divideRange = int(max_val / divideBy)
+
+        if divideRange == 0:
+            continue
+
+        #convert to string to avoid issues with replacing numeric values with strings
+        result_col = temp[col].astype(str)
+
+        for i in range(1, divideRange + 1):
+            max = divideBy * i
+            min = divideBy * (i - 1)
+            replaceValue = f'{min} - {max}'
+            
+            mask = (temp[col] <= max) & (temp[col] >= min)
+            result_col[mask] = replaceValue
+
+            if i == divideRange:
+                mask = temp[col] > max
+                result_col[mask] = f'>{max}'
+
+        # Replace the original numeric column with our new string results
+        temp[col] = result_col
+
+    return temp
+
+train_dataset = pd.read_csv("email_phishing_data.csv")
+cols_to_drop = [
+    'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
+    'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
+    'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
+    'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
+    'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
+    'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
+    'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
+    'SubdomainLevelRT', 'UrlLengthRT', #they are null
+    'id'
+]
+
+train_dataset.drop(columns=cols_to_drop, inplace=True)
+
+train_dataset = divideThresholds(train_dataset)
+
+train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
+
+decision_tree : Tree = buildTree(train_dataset.copy())
 
 import pickle
-# with open('decision_tree.pkl', 'wb') as f:
-#     pickle.dump(decision_tree, f)
+with open('decision_tree.pkl', 'wb') as f:
+    pickle.dump(decision_tree, f)
   
 def load_tree(file_path: str = "decision_tree.pkl") -> Tree:
     with open(file_path, 'rb') as f:
