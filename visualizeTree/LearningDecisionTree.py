@@ -220,13 +220,11 @@ def analyze_mail(email: str) -> pd.DataFrame:
     return pd.DataFrame([phishingFeatures])
 
 def divideThresholds(dataset) -> pd.DataFrame:
-    temp = dataset.copy().iloc[:, :-1] 
-
-    for col in temp.columns:
-        if temp[col].dtype not in [np.int64, np.float64]:
+    for col in dataset.columns:
+        if dataset[col].dtype not in [np.int64, np.float64]:
             continue
 
-        max_val = temp[col].max()
+        max_val = dataset[col].max()
         divideBy = int(max_val / 20)
         
         if divideBy == 0:
@@ -238,24 +236,24 @@ def divideThresholds(dataset) -> pd.DataFrame:
             continue
 
         #convert to string to avoid issues with replacing numeric values with strings
-        result_col = temp[col].astype(str)
+        result_col = dataset[col].astype(str)
 
         for i in range(1, divideRange + 1):
             max = divideBy * i
             min = divideBy * (i - 1)
             replaceValue = f'{min} - {max}'
             
-            mask = (temp[col] <= max) & (temp[col] >= min)
+            mask = (dataset[col] <= max) & (dataset[col] >= min)
             result_col[mask] = replaceValue
 
             if i == divideRange:
-                mask = temp[col] > max
+                mask = dataset[col] > max
                 result_col[mask] = f'>{max}'
 
         # Replace the original numeric column with our new string results
-        temp[col] = result_col
+        dataset[col] = result_col
 
-    return temp
+    return dataset
 
 # train_dataset = pd.read_csv("email_phishing_data.csv")
 # cols_to_drop = [
