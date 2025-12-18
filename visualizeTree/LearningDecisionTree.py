@@ -1,6 +1,6 @@
 import pandas as pd     #reading and processing like pandas but faster
 import numpy as np
-import re
+import re, pickle
 from urllib.parse import urlparse
 
 class Tree:
@@ -278,7 +278,6 @@ def divideThresholds(dataset) -> pd.DataFrame:
 
 # decision_tree : Tree = buildTree(train_dataset.copy())
 
-import pickle
 # with open('decision_tree.pkl', 'wb') as f:
 #     pickle.dump(decision_tree, f)
   
