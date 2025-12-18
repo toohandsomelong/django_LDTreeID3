@@ -9,23 +9,17 @@ Markdown==3.10
 MarkupSafe==3.0.3
 mpmath==1.3.0
 networkx==3.6
-numpy==2.3.5
-pandas==2.3.3
-pillow==12.0.0
 psutil==7.1.3
 python-dateutil==2.9.0.post0
 pytz==2025.2
 PyYAML==6.0.3
 regex==2025.11.3
-safetensors==0.7.0
 setuptools==78.1.1
 six==1.17.0
 sqlparse==0.5.3
 sympy==1.14.0
 tokenizers==0.22.1
-torch==2.9.1+cu126
-torchvision==0.24.1+cu126
-transformers==4.57.3
 tzdata==2025.2
 wheel==0.45.1
+
 
