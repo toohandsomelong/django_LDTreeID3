@@ -220,24 +220,56 @@ def analyze_mail(email: str) -> pd.DataFrame:
 
     return divideThresholds(pd.DataFrame([phishingFeatures]))
 
-def divideThresholds(dataset) -> pd.DataFrame:
+def storeThresholds(dataset, max_divisions) -> dict:
+    thresholds = {}
     for col in dataset.columns:
         if dataset[col].dtype not in [np.int64, np.float64]:
             continue
 
         max_val = dataset[col].max()
-        divideBy = int(max_val / 20)
+        divideBy = int(max_val / max_divisions)
         
-        if divideBy == 0:
-            continue
+        divideRange = 0
+        if divideBy > 1:
+            divideRange = int(max_val / divideBy)
 
-        divideRange = int(max_val / divideBy)
+        thresholds[col] = {
+            'max': max_val,
+            'divideBy': divideBy,
+            'divideRange': divideRange
+        }
+    return thresholds
 
-        if divideRange == 0:
+thresholds = None
+
+def divideThresholds(dataset) -> pd.DataFrame:
+    for col in dataset.columns:
+        if col == dataset.columns[-1]:
             continue
+        
+        if dataset[col].dtype not in [np.int64, np.float64]:
+            continue
+       
+        if col not in thresholds:
+            raise ValueError(f"Column {col} not found in thresholds.")
+        
+        if thresholds is None:
+            raise ValueError("Thresholds have not been initialized.")
+
+        max = thresholds[col]['max']
+        divideBy = thresholds[col]['divideBy']
+        divideRange = thresholds[col]['divideRange']
+        print(f'Dividing column {col} into {divideRange} ranges of {divideBy} each.')
 
         #convert to string to avoid issues with replacing numeric values with strings
         result_col = dataset[col].astype(str)
+
+        if(divideRange == 0):
+            mask = dataset[col] >= max
+            result_col[mask] = f'>{max}'
+            dataset[col] = result_col
+            dataset[col] = dataset[col].astype(str)
+            continue
 
         for i in range(1, divideRange + 1):
             max = divideBy * i
@@ -256,36 +288,42 @@ def divideThresholds(dataset) -> pd.DataFrame:
 
     return dataset
 
-# train_dataset = pd.read_csv("email_phishing_data.csv")
-# cols_to_drop = [
-#     'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
-#     'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
-#     'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
-#     'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
-#     'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
-#     'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
-#     'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
-#     'SubdomainLevelRT', 'UrlLengthRT', #they are null
-#     'id'
-# ]
+train_dataset = pd.read_csv("email_phishing_data.csv")
+cols_to_drop = [
+    'PctExtHyperlinks', 'PctExtResourceUrls', 'ExtFavicon', 'InsecureForms',
+    'RelativeFormAction', 'ExtFormAction', 'AbnormalFormAction',
+    'PctNullSelfRedirectHyperlinks', 'FrequentDomainNameMismatch',
+    'FakeLinkInStatusBar', 'RightClickDisabled', 'PopUpWindow',
+    'SubmitInfoToEmail', 'IframeOrFrame', 'MissingTitle',
+    'ImagesOnlyInForm', 'PctExtResourceUrlsRT', 'AbnormalExtFormActionR',
+    'ExtMetaScriptLinkRT', 'PctExtNullSelfRedirectHyperlinksRT',
+    'SubdomainLevelRT', 'UrlLengthRT', #they are null
+    'id'
+]
+train_dataset.drop(columns=cols_to_drop, inplace=True)
 
-# train_dataset.drop(columns=cols_to_drop, inplace=True)
+thresholds = storeThresholds(train_dataset, 10)
+train_dataset = divideThresholds(train_dataset)
 
-# train_dataset = divideThresholds(train_dataset)
+train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
 
-# train_dataset = train_dataset.sample(frac=1).reset_index(drop=True) #shuffle
+decision_tree : Tree = buildTree(train_dataset.copy())
 
-# decision_tree : Tree = buildTree(train_dataset.copy())
+with open('decision_tree.pkl', 'wb') as f:
+    pickle.dump(decision_tree, f)
 
-# with open('decision_tree.pkl', 'wb') as f:
-#     pickle.dump(decision_tree, f)
+with open('thresholds.pkl', 'wb') as f:
+    pickle.dump(thresholds, f)
   
-def load_tree(file_path: str = "decision_tree.pkl") -> Tree:
+def load_tree(tree_path: str = "decision_tree.pkl", thresholds_path: str = "thresholds.pkl") -> Tree:
     try:
-        with open(file_path, 'rb') as f:
+        with open(tree_path, 'rb') as f:
             loaded_tree : Tree = pickle.load(f)
+        with open(thresholds_path, 'rb') as f:
+            global thresholds
+            thresholds = pickle.load(f)
     except FileNotFoundError:
-      raise FileExistsError('File not found: ' + file_path)
+      raise FileExistsError('File not found: ' + tree_path)
     except Exception as e:
       raise RuntimeError(f'{str(e)}\nSuggest to retrain the model to generate the decision_tree.pkl file.')
     return loaded_tree
