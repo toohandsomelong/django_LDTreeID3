@@ -10,10 +10,11 @@
     <ul>
         {% for user_email in user_emails %}
         <li class="{% if not user_email.is_read %}unread{% endif %}">
-            <div class="email-sender">{{ user_email.email.sender_email }}</div>
-            <div class="email-subject">{{ user_email.email.subject }}</div>
-            <div class="email-date">{{ user_email.email.send_date}}</div>
-            <a href="{% url 'home:email_detail' user_email.email.id %}">View</a>
+            <a href="{% url 'home:email_detail' user_email.email.id %}" class="email-item-link">
+                <div class="email-sender">{{ user_email.email.sender_email }}</div>
+                <div class="email-subject">{{ user_email.email.subject }}</div>
+                <div class="email-date">{{ user_email.email.send_date}}</div>
+            </a>
         </li>
         {% empty %}
         <li>No emails available.</li>

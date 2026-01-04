@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Decision Tree Visualization</h1>
-    <div id="tree-container" style="width: 100%; height: 1500px; background: var(--secondary-bg-color); border: 1px solid var(--accent-color); overflow: hidden;"></div>
+    <div id="tree-container" style="width: 100%; height: 1500px; background: var(--bg-color); border: 1px solid var(--accent-color); overflow: hidden;"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
@@ -31,8 +31,7 @@
 
         svg.call(zoom);
 
-        const tree = d3.tree().size([width, height]).nodeSize([30, 50]);  // Tighter spacing
-
+        const tree = d3.tree().size([width, height]).nodeSize([30, 50]); 
         const root = d3.hierarchy(treeData, d => d.children);
 
         root.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -45,7 +44,7 @@
             .attr("class", "link")
             .attr("d", d => `M${d.source.x},${d.source.y}L${d.source.x},${d.target.y}L${d.target.x},${d.target.y}`)
             .attr("fill", "none")
-            .attr("stroke", "var(--accent-color)")
+            .attr("stroke", "var(--text-color)")
             .attr("stroke-width", 1);  // Thinner lines
 
         const node = g.selectAll(".node")
@@ -65,7 +64,7 @@
             .attr("dy", 3)
             .attr("x", 0)
             .attr("text-anchor", "middle")
-            .attr("fill", "black")
+            .attr("fill", "var(--text-color)")
             .attr("font-size", "8px")  // Smaller font
             .text(d => d.data.name);
         

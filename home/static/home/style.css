@@ -2,14 +2,13 @@
 .gmail-layout {
     display: flex;
     height: 100vh;
-    background-color: var(--secondary-bg-color);
     color: var(--text-color);
 }
 
 /* Sidebar */
 .sidebar {
     width: 250px;
-    background-color: var(--primary-bg-color);
+    background-color: var(--bg-color);
     border-right: 1px solid var(--accent-color);
     padding: 10px;
     box-sizing: border-box;
@@ -19,7 +18,7 @@
     width: 100%;
     padding: 10px;
     background-color: var(--accent-color);
-    color: var(--secondary-bg-color);
+    color: var(--text-color);
     border: none;
     border-radius: 5px;
     font-weight: bold;
@@ -28,7 +27,7 @@
 }
 
 .create-btn:hover {
-    background-color: var(--text-color);
+    background-color: var(--hover-color);
 }
 
 .labels {
@@ -41,7 +40,9 @@
 }
 
 .labels li a {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding: 8px;
     text-decoration: none;
@@ -53,7 +54,6 @@
 .labels li a:hover,
 .labels li.active a {
     background-color: var(--accent-color);
-    color: var(--secondary-bg-color);
 }
 
 /* Main content */
@@ -69,7 +69,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: var(--primary-bg-color);
+    background-color: var(--bg-color);
     border-bottom: 1px solid var(--accent-color);
 }
 
@@ -87,7 +87,7 @@
 
 .email-list h2 {
     margin-bottom: 10px;
-    color: var(--accent-color);
+    color: var(--text-color);
 }
 
 .email-list ul {
@@ -98,19 +98,33 @@
 .email-list li {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 0;
     border-bottom: 1px solid var(--accent-color);
-    background-color: var(--primary-bg-color);
+    background-color: var(--bg-color);
     transition: background-color 0.3s;
 }
 
 .email-list li:hover {
-    background-color: var(--secondary-bg-color);
+    background-color: var(--hover-color);
+    cursor: pointer;
 }
 
 .email-list li.unread {
     font-weight: bold;
-    background-color: #e3f2fd38; /* Light blue for unread */
+    background-color: var(--unread-bg-color);
+}
+
+.email-list li.unread:hover {
+    background-color: var(--hover-color);
+}
+
+.email-item-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .email-sender {
@@ -128,13 +142,6 @@
     font-size: 0.9em;
 }
 
-.email-list li a {
-    margin-left: 10px;
-    text-decoration: none;
-    color: var(--accent-color);
-    font-weight: bold;
-}
-
 /* Email view */
 .email-view {
     flex: 1;
@@ -143,7 +150,7 @@
 }
 
 .email-header {
-    border-bottom: 1px solid var(--accent-color);
+    border-bottom: 1px solid var(--text-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -166,14 +173,14 @@
     margin-right: 10px;
     padding: 8px 12px;
     background-color: var(--accent-color);
-    color: var(--secondary-bg-color);
+    color: var(--text-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .email-actions button:hover {
-    background-color: var(--text-color);
+    background-color: var(--hover-color);
 }
 
 /* Compose */
@@ -185,7 +192,7 @@
 
 .compose h2 {
     margin-bottom: 20px;
-    color: var(--accent-color);
+    color: var(--text-color);
 }
 
 .compose form {
@@ -199,7 +206,7 @@
     padding: 8px;
     border: 1px solid var(--accent-color);
     border-radius: 4px;
-    background-color: var(--secondary-bg-color);
+    background-color: var(--bg-color);
     color: var(--text-color);
 }
 
@@ -210,24 +217,29 @@
 
 .form-actions {
     margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .form-actions button {
-    margin-right: 10px;
-    padding: 8px 12px;
+    width: 15%;
+    margin-left: 10px;
+    padding: 12px 20px;
     background-color: var(--accent-color);
-    color: var(--secondary-bg-color);
+    color: var(--text-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .form-actions button:hover {
-    background-color: var(--text-color);
+    background-color: var(--hover-color);
 }
 .count-badge {
     background-color: var(--accent-color);
-    color: var(--secondary-bg-color);
+    color: var(--text-color);
     border-radius: 50%;
     padding: 2px 6px;
     font-size: 0.8em;

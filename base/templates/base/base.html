@@ -44,15 +44,19 @@
                 <button class="create-btn" onclick="location.href='{% url 'home:send_email' %}'">Create Email</button>
                 <ul class="labels">
                     <li class="{% if request.GET.label == None %}active{% endif %}">
-                        <a href="{% url 'home:index' %}">Inbox</a>
-                        {% if unread_count > 0 %}<span class="count-badge">{{ unread_count }}</span>{% endif %}
+                        <a href="{% url 'home:index' %}">
+                            Inbox
+                            {% if unread_count > 0 %}<span class="count-badge">{{ unread_count }}</span>{% endif %}
+                        </a>
                     </li>
                     <li class="{% if request.GET.label == 'sent' %}active{% endif %}">
                         <a href="/?label=sent">Sent</a>
                     </li>
                     <li class="{% if request.GET.label == 'phishing' %}active{% endif %}">
-                        <a href="/?label=phishing">Phishing</a>
-                        {% if phishing_unread_count > 0 %}<span class="count-badge">{{ phishing_unread_count }}</span>{% endif %}
+                        <a href="/?label=phishing">
+                            Phishing
+                            {% if phishing_unread_count > 0 %}<span class="count-badge">{{ phishing_unread_count }}</span>{% endif %}
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -72,11 +76,6 @@
         </div>
         {% endblock %}
     </main>
-
-    <!-- FOOTER -->
-    <footer style="margin-bottom: auto;">
-        <p>Footer</p>
-    </footer>
 
 </body>
 </html>
