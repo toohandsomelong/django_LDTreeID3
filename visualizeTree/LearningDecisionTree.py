@@ -36,11 +36,9 @@ class Tree:
         "name": f"Node: {self.attribute}",
         "type": "node",
         "children": [
-          {"name": f"Value: {value}", "children": [child.to_dict()]} for value, child in self.children.items()
+          {"name": f"{value}", "children": [child.to_dict()]} for value, child in self.children.items()
         ]
       }
-
-  
 
 def Entropy(dataset) -> float:
   # to numpy because np.unique required numpy
@@ -133,6 +131,48 @@ def predict(dataset : pd.DataFrame, tree : Tree) -> list[str]:
 
         ls.append(currentNode.label)
     return ls
+
+def getChildrenLabels(tree: Tree) -> set[str]:
+    labels = set()
+    if tree.isLeaf:
+        labels.add(tree.label)
+        return labels
+    
+    for child in tree.children.values():
+            labels.update(getChildrenLabels(child))
+    return labels
+
+def canPrune(tree: Tree) -> tuple[bool, str]:
+    if tree.isLeaf:
+        return False, None
+    
+    labels = getChildrenLabels(tree)
+    
+    #only 1 label then able to prune
+    if len(labels) == 1:
+        return True, list(labels)[0]
+    
+    return False, None
+
+def pruneTree(tree: Tree) -> Tree:
+    if tree.isLeaf:
+        newTree = Tree()
+        newTree.setLeaf(tree.label)
+        return newTree
+    
+    newTree = Tree(tree.attribute)
+    
+    for value, child in tree.children.items():
+        pruned = pruneTree(child)
+        newTree.addChild(value, pruned)
+    
+    canCollapse, label = canPrune(newTree)
+    if canCollapse:
+        collapsed = Tree()
+        collapsed.setLeaf(label)
+        return collapsed
+    
+    return newTree
 
 def calculate_accuracy(predLabels, trueLabels):
     _str = ""
@@ -327,3 +367,5 @@ def load_tree(tree_path: str = "decision_tree.pkl", thresholds_path: str = "thre
     except Exception as e:
       raise RuntimeError(f'{str(e)}\nSuggest to retrain the model to generate the decision_tree.pkl file.')
     return loaded_tree
+
+tree = pruneTree(load_tree())

@@ -31,7 +31,7 @@
 
         svg.call(zoom);
 
-        const tree = d3.tree().size([width, height]).nodeSize([30, 50]); 
+        const tree = d3.tree().size([width, height]).nodeSize([40, 65]); 
         const root = d3.hierarchy(treeData, d => d.children);
 
         root.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -55,7 +55,7 @@
 
         
         node.append("circle")
-            .attr("r", 20)
+            .attr("r", 30)
             .attr("fill", d => d.data.type === "leaf" ? "green" : "var(--accent-color)")
             .attr("stroke", "var(--text-color)")
             .attr("stroke-width", 1);
